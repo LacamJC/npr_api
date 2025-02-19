@@ -37,7 +37,7 @@ exports.getUser = async (req,res) => {
 exports.createUser = async (req,res) => {
     try{
         const new_user = await userService.createUser(req.body)
-        res.json(new_user)
+        res.status(201).json(new_user)
     } catch (error) {
         res.status(500).json({message: error.message})
     }
