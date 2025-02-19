@@ -25,7 +25,4 @@ const Business = sequelize.define("Business", {
     }
 })
 
-
-// Business.sync({force:true})
-
 module.exports = Business
