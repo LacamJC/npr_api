@@ -25,4 +25,13 @@ const Business = sequelize.define("Business", {
     }
 })
 
+// sequelize.sync()
+// .then(() => {
+//     return Business.create({
+//         name: "Bioservice",
+//         cnpj: "12321312",
+//         description: "TEsteteste"
+//     })
+// })
+
 module.exports = Business

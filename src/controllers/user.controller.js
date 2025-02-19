@@ -1,22 +1,22 @@
 const userService = require("../services/user.service")
 
-// exports.getAllUsers = async (req,res) => {
-//     try {
-//         const users = await userService.getAllUsers()
-//         res.json(users)
-//     } catch (error){
-//         res.status(500).json({message: error.message})
-//     }
-// }
+exports.getAllUsers = async (req,res) => {
+    try {
+        const users = await userService.getAllUsers()
+        res.json(users)
+    } catch (error){
+        res.status(500).json({message: error.message})
+    }
+}
 
-// exports.getUserById = async (req,res) => {
-//     try {
-//         const user_by_id = await userService.getUserById(req.query)
-//         res.json(user_by_id)
-//     } catch(err) {
-//         res.status(500).json({message: error.message})
-//     }
-// }
+exports.getUserById = async (req,res) => {
+    try {
+        const user_by_id = await userService.getUserById(req.query)
+        res.json(user_by_id)
+    } catch(err) {
+        res.status(500).json({message: error.message})
+    }
+}
 
 exports.getUser = async (req,res) => {
     try {

@@ -4,5 +4,6 @@ const collectionPointController = require("../controllers/collectionPointControl
 const router = express.Router()
 
 router.get("/", collectionPointController.getCollectionPoint)
+router.post("/", collectionPointController.createCollectionPoint)
 
 module.exports = router

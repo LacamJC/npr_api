@@ -38,7 +38,8 @@ const CollectionPoint = sequelize.define("CollectionPoint", {
 
     id_business: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        defaultValue: null
     },
 
     id_category: {

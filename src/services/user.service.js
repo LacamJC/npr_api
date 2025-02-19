@@ -10,6 +10,16 @@ exports.getUserById = async (id) => {
 
 exports.createUser = async (data) => {
     const {name, password} = data
+
+    if(name.length < 4 || name == undefined || name == null || typeof(name) !== "string" || name.trim().length < 1)
+    {
+        return {message: "Usuário inválido, o usuario deve ter pelo menos 4 caracteres"}
+    }
+
+    if(password.length < 6 || password == undefined || password == null  || typeof(password) !== "string" || password.trim().length < 1)
+    { 
+        return {message: "A senha deve ter pelo menos 6 caracteres"}
+    }
     try{
         const newUser = await User.create({
             name : name,

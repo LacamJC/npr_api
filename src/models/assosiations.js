@@ -6,10 +6,14 @@ const Category = require('./Category')
 
 async function syncDatabase() {
     try{
-        await User.sync({force:true})
-        await Business.sync({force:true})
-        await Category.sync({force:true})
-        await CollectionPoint.sync({force:true})
+         CollectionPoint.sync({force:true})
+      
+            
+            Business.sync({force:true})
+            Category.sync({force:true})
+        
+            User.sync({force:true})
+       
         console.log("Tabelas sincronizadas")
     }catch(error){
         console.error("Erro ao sincronizar tabelas: " + error)
