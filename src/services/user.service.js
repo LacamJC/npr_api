@@ -51,3 +51,9 @@ exports.createUser = async (data) => {
     }
 
  }
+
+ exports.deleteUser = async (data) => {
+    const { id } = data 
+    return await User.destroy({where : {id : id}})
+
+ }
