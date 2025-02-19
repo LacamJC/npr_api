@@ -10,6 +10,25 @@ exports.getUserById = async (id) => {
 
 exports.createUser = async (data) => {
     const {name, password} = data
+    let valid = true
+    await User.findOne({where : {
+        name : name,
+        password : password,
+    }})
+    .then((user)=>{
+        if(user)
+        {
+            console.log("USUARIO JA CADASTRADO")
+            valid = false
+        }
+    })
+    .catch(err=>{
+        console.log("Erro ao verficiar se usuario ja e cadastrado")
+    })
+
+    if(!valid){
+        return {message: "Usuário já cadastrado"}
+    }
 
     if(name.length < 4 || name == undefined || name == null || typeof(name) !== "string" || name.trim().length < 1)
     {

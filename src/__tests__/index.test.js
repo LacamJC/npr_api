@@ -1,6 +1,7 @@
 const server = require("../../server")
 const request = require("supertest")
 const database = require("../config/database")
+const { response } = require("express")
 
 beforeAll(async () => {
     await database.sync({force:true})
@@ -25,7 +26,7 @@ describe("Requisições para a rota '/'", () => {
 })
 
 describe("Requisições para a rota '/api/user'", () => {
-    it("Cria diferentes usuarios", async () => {
+    it("POST /api/user Cria diferentes usuarios", async () => {
     await request(server)
     .post("/api/user").send({
         name: "Alice Smith",
@@ -58,7 +59,7 @@ describe("Requisições para a rota '/api/user'", () => {
     })
 
 
-    it("Retorna um json com todos os usuarios", async () => {
+    it("GET /api/user Retorna um json com todos os usuarios", async () => {
         const response = await request(server)
         .get("/api/user")
 
@@ -71,14 +72,22 @@ describe("Requisições para a rota '/api/user'", () => {
         });
     })
 
-    it("Tenta criar um usuario já cadastrao", async () => {
-        const reponse = request(server)
+    it("POST /api/user Retorna uma mensagem de erro ao tentar cadastra um usuário já existente", async () => {
+        await request(server)
         .post("/api/user").send({
-            name: "Alice Smith",
-            password: "a9d4F2g!"
+            name : "Nome existe",
+            password : "123456"
         })
 
-        expect(response.status).toBe(500)
+        const response = await request(server)
+        .post("/api/user").send({
+            name : "Nome existe",
+            password : "123456"
+        })
+        expect(response.body).toHaveProperty('message')
+
+
+
     })
 
 })
