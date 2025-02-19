@@ -13,7 +13,7 @@ exports.getUserById = async (req,res) => {
     try {
         const user_by_id = await userService.getUserById(req.query)
         res.json(user_by_id)
-    } catch(err) {
+    } catch(error) {
         res.status(500).json({message: error.message})
     }
 }
