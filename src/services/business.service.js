@@ -1,14 +1,14 @@
 const { Business } = require("../models/assosiations")
 
 exports.getAllBusiness = async (id) => {
-    if(id){
+    if (id) {
         console.log("E UMA ESPECIFICA ")
     }
     return await Business.findAll()
 }
 
 exports.getBusinessById = async (id) => {
-    return await Business.findOne({where : {id:id}})
+    return await Business.findOne({ where: { id: id } })
 }
 
 exports.create = async (data) => {
@@ -26,49 +26,62 @@ exports.create = async (data) => {
         return { message: "Descrição inválida" }
     }
 
-    return await Business.create({
-        name: name,
-        cnpj: cnpj,
-        description: description
+    const business = await Business.findOne({
+        where: {
+            name: name,
+            cnpj: cnpj,
+        }
     })
+
+    if (business) {
+        return { message: "Empresa já cadastrada" }
+    } else {
+        return await Business.create({
+            name: name,
+            cnpj: cnpj,
+            description: description
+        })
+    }
+
+
 }
 
 exports.deleteBusiness = async (data) => {
-    try{
+    try {
         let _id = data.id
 
-        const business = await Business.findOne({where : {id : _id}})
+        const business = await Business.findOne({ where: { id: _id } })
 
-        if(!business){
-            return {message : "Empresa não encontrada"}
+        if (!business) {
+            return { message: "Empresa não encontrada" }
         }
 
-        return Business.destroy({where : {id : _id}})
+        return Business.destroy({ where: { id: _id } })
 
-    }   catch(error) {
-        return {message: "Erro ao apagar empresa do banco de dados"}
+    } catch (error) {
+        return { message: "Erro ao apagar empresa do banco de dados" }
     }
 }
 
 exports.updateBusiness = async (data) => {
-    let id = data.id 
+    let id = data.id
 
     try {
-        const business = await Business.findOne({where:{id:id}})
+        const business = await Business.findOne({ where: { id: id } })
 
-        if(!business) {
-            return {message:"Empresa não encontrada no banco de dados"}
+        if (!business) {
+            return { message: "Empresa não encontrada no banco de dados" }
         }
 
         return await Business.update({
-            name : data.name,
-            cnpj : data.cnpj,
-            description : data.description
+            name: data.name,
+            cnpj: data.cnpj,
+            description: data.description
         }, {
-            where : {id : data.id}
+            where: { id: data.id }
         })
 
-    }catch(error) {
+    } catch (error) {
         return error
     }
 }

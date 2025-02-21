@@ -91,3 +91,65 @@ describe("Requisições para a rota '/api/user'", () => {
     })
 
 })
+
+
+describe("Requisições para a rota '/api/business'", () => {
+    it("POST /api/business Cria diferentes empresas", async () => {
+        await request(server).post("/api/business").send({
+            name: "Empresa 1",
+            cnpj: "12.345.678/0001-99",
+            description: "Empresa de tecnologia focada em soluções web"
+        });
+        
+        await request(server).post("/api/business").send({
+            name: "Empresa 2",
+            cnpj: "23.456.789/0001-88",
+            description: "Consultoria em marketing digital e estratégias online"
+        });
+        
+        await request(server).post("/api/business").send({
+            name: "Empresa 3",
+            cnpj: "34.567.890/0001-77",
+            description: "Serviços de design gráfico e branding para marcas"
+        });
+        
+        await request(server).post("/api/business").send({
+            name: "Empresa 4",
+            cnpj: "45.678.901/0001-66",
+            description: "Agência de viagens e turismo especializada em roteiros personalizados"
+        });
+        
+        const response = await request(server).post("/api/business").send({
+            name: "Empresa 5",
+            cnpj: "56.789.012/0001-55",
+            description: "Fábrica de móveis sob medida para empresas e residências"
+        });
+
+        expect(response.status).toBe(201)
+        
+    })
+
+    it("GET /api/business retorna um json com todas as empresas", async () => {
+        
+        const response = await request(server).get("/api/business")
+        // console.log("##############")
+        // console.log(response.status)
+        expect(response.status).toBe(200)
+    })
+
+    it("POST /api/business impede de criar registros duplicados", async () => {
+        await request(server).post("/api/business").send({
+            name: "Empresa 4",
+            cnpj: "45.678.901/0002-66",
+            description: "Agência de viagens e turismo especializada em roteiros personalizados"
+        });
+
+        const response = await request(server).post("/api/business").send({
+            name: "Empresa 4",
+            cnpj: "45.678.901/0002-66",
+            description: "Agência de viagens e turismo especializada em roteiros personalizados"
+        });
+
+        expect(response.body).toHaveProperty('message')
+    })
+})

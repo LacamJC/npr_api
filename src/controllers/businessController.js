@@ -6,10 +6,10 @@ exports.getBusiness = async (req, res) => {
         let id = req.query.id
         if (id) {
             const business = await businessService.getBusinessById(id)
-            res.json(business)
-        }else{
+            res.status(200).json(business)
+        } else {
             const business = await businessService.getAllBusiness()
-            res.json(business)
+            res.status(200).json(business)
         }
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -20,7 +20,10 @@ exports.getBusiness = async (req, res) => {
 exports.createBusiness = async (req, res) => {
     try {
         const newBusiness = await businessService.create(req.body)
-        res.json(newBusiness)
+
+
+        res.status(201).json(newBusiness)
+
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
