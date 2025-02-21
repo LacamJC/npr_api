@@ -1,4 +1,8 @@
-const { User } = require("../models/assosiations")
+const { User, CollectionPoint } = require("../models/assosiations")
+
+exports.getCollectionPoints = async (id) => {
+    return CollectionPoint.findAll({where : {id_user : id}})
+}
 
 exports.getAllUsers = async () => {
     return await User.findAll()

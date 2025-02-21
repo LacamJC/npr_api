@@ -60,3 +60,13 @@ exports.updateUser = async (req,res) => {
         res.status(500).json({message: error.message})
     }
 }
+
+exports.getCollectionPoints = async(req,res) => {
+    try{
+        const collectionPoints = await userService.getCollectionPoints(req.query.id)
+        res.json(collectionPoints)
+    }
+    catch(error) {
+        res.status(500).json({message: error.message})
+    }
+}
