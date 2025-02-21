@@ -1,7 +1,14 @@
 const { Business } = require("../models/assosiations")
 
-exports.getAllBusiness = async () => {
+exports.getAllBusiness = async (id) => {
+    if(id){
+        console.log("E UMA ESPECIFICA ")
+    }
     return await Business.findAll()
+}
+
+exports.getBusinessById = async (id) => {
+    return await Business.findOne({where : {id:id}})
 }
 
 exports.create = async (data) => {
@@ -40,5 +47,28 @@ exports.deleteBusiness = async (data) => {
 
     }   catch(error) {
         return {message: "Erro ao apagar empresa do banco de dados"}
+    }
+}
+
+exports.updateBusiness = async (data) => {
+    let id = data.id 
+
+    try {
+        const business = await Business.findOne({where:{id:id}})
+
+        if(!business) {
+            return {message:"Empresa não encontrada no banco de dados"}
+        }
+
+        return await Business.update({
+            name : data.name,
+            cnpj : data.cnpj,
+            description : data.description
+        }, {
+            where : {id : data.id}
+        })
+
+    }catch(error) {
+        return error
     }
 }
