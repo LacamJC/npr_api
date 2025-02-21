@@ -38,3 +38,12 @@ exports.deleteCollectionPoint = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+exports.updateCollectionPoint = async (req,res) => {
+    try {
+        const collectionPoint = await collectionPointService.updateCollectionPoint(req.body)
+        res.json(collectionPoint)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}

@@ -69,5 +69,27 @@ exports.createCollectionPoint = async (data) => {
 exports.deleteCollectionPoint = async (data) => {
     const id = data.id
 
-    return CollectionPoint.destroy({where: {id: id}})
+    return CollectionPoint.destroy({ where: { id: id } })
+}
+
+exports.updateCollectionPoint = async (data) => {
+    const { name, business_name, cep, id } = data
+    console.log(id)
+    console.log(typeof(id))
+    try {
+        const point = await CollectionPoint.findOne({ where: { id: id } })
+
+        if (!point) {
+            return { message: "Ponto de coleta não encontrado no banco de dados" }
+        }
+
+        return await CollectionPoint.update({
+            name: name,
+            business_name: business_name,
+            cep: cep,
+
+        }, { where: { id: Number(id) } })
+    } catch (error) {
+        return error.message
+    }
 }
