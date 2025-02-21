@@ -51,3 +51,12 @@ exports.deleteUser = async (req,res) => {
         res.status(500).json({message: error.message})
     }
 }
+
+exports.updateUser = async (req,res) => {
+    try{
+        const user = await userService.updateUser(req.body)
+        res.json(user)
+    } catch(error) {
+        res.status(500).json({message: error.message})
+    }
+}
