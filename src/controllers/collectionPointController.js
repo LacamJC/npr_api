@@ -1,3 +1,4 @@
+const { col } = require("sequelize")
 const collectionPointService = require("../services/collectionPoint.service")
 
 exports.getCollectionPoint = async (req, res) => {
@@ -25,6 +26,15 @@ exports.createCollectionPoint = async (req, res) => {
         res.json(newCollectionPoint)
     }
     catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+exports.deleteCollectionPoint = async (req, res) => {
+    try {
+        const collectionPoint = await collectionPointService.deleteCollectionPoint(req.query)
+        res.json(collectionPoint)
+    } catch (error) {
         res.status(500).json({ message: error.message })
     }
 }

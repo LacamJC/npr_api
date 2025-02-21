@@ -14,13 +14,13 @@ exports.getCollectionPointByType = async (data) => {
     //     include: {
     //         model: Category,
     //         as: "category",
-            
-            
+
+
     //     }
     // })
 
     return await CollectionPoint.findAll({
-        where : {id_category : _id}
+        where: { id_category: _id }
     })
 
     // return id
@@ -64,4 +64,10 @@ exports.createCollectionPoint = async (data) => {
     })
 
     return new_collectionPoint
+}
+
+exports.deleteCollectionPoint = async (data) => {
+    const id = data.id
+
+    return CollectionPoint.destroy({where: {id: id}})
 }
