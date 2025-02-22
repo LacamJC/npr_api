@@ -7,13 +7,14 @@ const Category = require('./Category')
 async function syncDatabase() {
     try{
             
-            await Category.sync({force:true})
+        await User.sync({force:true})
             
-            await User.sync({force:true})
+        await Business.sync({force:true})
+        await Category.sync({force:true})
+        await CollectionPoint.sync({force:true})
             
-            await Business.sync({force:true})
 
-            await CollectionPoint.sync({force:true})
+            
       
             
         console.log("Tabelas sincronizadas")

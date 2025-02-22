@@ -4,6 +4,7 @@ const router = express.Router()
 
 router.get("/", userController.getUser)
 router.get("/collectionPoints", userController.getCollectionPoints)
+router.post("/login", userController.verifyUser)
 router.post("/", userController.createUser)
 router.delete("/", userController.deleteUser)
 router.put("/", userController.updateUser)

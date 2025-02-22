@@ -1,7 +1,8 @@
 const { User, CollectionPoint } = require("../models/assosiations")
 const { validatePassword, validateName } = require("../utils/validations")
 const { userExists } = require("../utils/verify")
-const bcrypt = require("bcrypt")
+const { createHashPassword, comparePassword } = require("../utils/security")
+const { compare } = require("bcrypt")
 
 exports.getCollectionPoints = async (id) => {
     return CollectionPoint.findAll({ where: { id_user: id } })
@@ -15,14 +16,18 @@ exports.getUserById = async (id) => {
     return await User.findOne({ where: { id: id } })
 }
 
+exports.getUserByEmail = async (email) => {
+    return await User.findOne({where : {email : email}})
+}
+
 exports.createUser = async (data) => {
-    const { name, password } = data
+    const { name, password, email } = data
 
     const passwordError = validatePassword(password)
     if (passwordError) {
         return passwordError.message
     }
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await createHashPassword(password)
 
     const nameError = validateName(name)
     if (nameError) {
@@ -38,6 +43,7 @@ exports.createUser = async (data) => {
     try {
         const newUser = await User.create({
             name: name,
+            email: email,
             password: hashedPassword
         })
         return newUser
@@ -58,6 +64,7 @@ exports.updateUser = async (data) => {
     const data_user = {
         id: data.id,
         name: data.name,
+        email: data.email,
         password: data.password
     }
 
@@ -70,7 +77,8 @@ exports.updateUser = async (data) => {
 
         await User.update({
             name: data_user.name,
-            password: data_user.password
+            password: data_user.password,
+            email: data_user.email
         }, {
             where: { id: data_user.id }
         })
@@ -81,3 +89,23 @@ exports.updateUser = async (data) => {
     }
 }
 
+exports.verifyUser = async (data) => {
+    const {email, password} = data
+
+    const exists = await userExists(email)
+    if(!exists){
+        return {message: "Usuário não encontrado no banco de dados"}
+    }
+
+    const user = await User.findOne({where :{email : email}})
+
+    const isTheSame = await comparePassword(password, user.password)
+    console.log(isTheSame)
+    if(isTheSame){
+
+        return {message: "Senha correta", loginCorrect : true}
+    }else{
+        return {message: "Email ou Senha inválidos"}
+    }
+
+}

@@ -1,10 +1,10 @@
 const {User, Business} = require("../models/assosiations")
 
-exports.userExists = async (name) => {
+exports.userExists = async (email) => {
     try {
         const user = await User.findOne({
             where: {
-                name: name,
+                email: email,
             }
         })
 

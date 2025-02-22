@@ -70,3 +70,13 @@ exports.getCollectionPoints = async(req,res) => {
         res.status(500).json({message: error.message})
     }
 }
+
+exports.verifyUser = async (req,res) => {
+    try{
+        const user = await userService.verifyUser(req.body)
+        res.json(user)
+        
+    }catch(error){
+        res.status(500).json({message: error.message})
+    }
+}

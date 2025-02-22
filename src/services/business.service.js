@@ -1,7 +1,7 @@
 const { Business } = require("../models/assosiations")
 const { validateName, validatePassword, validateDescription, validateCNPJ } = require("../utils/validations")
 const { businessExists } = require("../utils/verify")
-const bcrypt = require("bcrypt")
+const { createHashPassword } = require("../utils/security") 
 exports.getAllBusiness = async (id) => {
     if (id) {
         console.log("E UMA ESPECIFICA ")
@@ -26,7 +26,7 @@ exports.create = async (data) => {
     if (passwordError) {
         return passwordError.message
     }
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await createHashPassword(password)
 
 
 
