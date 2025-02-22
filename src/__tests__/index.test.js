@@ -97,30 +97,35 @@ describe("Requisições para a rota '/api/business'", () => {
     it("POST /api/business Cria diferentes empresas", async () => {
         await request(server).post("/api/business").send({
             name: "Empresa 1",
+            password: "1234567",
             cnpj: "12.345.678/0001-99",
             description: "Empresa de tecnologia focada em soluções web"
         });
         
         await request(server).post("/api/business").send({
             name: "Empresa 2",
+            password: "1234567",
             cnpj: "23.456.789/0001-88",
             description: "Consultoria em marketing digital e estratégias online"
         });
         
         await request(server).post("/api/business").send({
             name: "Empresa 3",
+            password: "1234567",
             cnpj: "34.567.890/0001-77",
             description: "Serviços de design gráfico e branding para marcas"
         });
         
         await request(server).post("/api/business").send({
             name: "Empresa 4",
+            password: "1234567",
             cnpj: "45.678.901/0001-66",
             description: "Agência de viagens e turismo especializada em roteiros personalizados"
         });
         
         const response = await request(server).post("/api/business").send({
             name: "Empresa 5",
+            password: "1234567",
             cnpj: "56.789.012/0001-55",
             description: "Fábrica de móveis sob medida para empresas e residências"
         });

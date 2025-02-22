@@ -14,6 +14,11 @@ const Business = sequelize.define("Business", {
         allowNull: false
     },
 
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+
     cnpj: {
         type: DataTypes.STRING,
         allowNull: false
@@ -25,13 +30,6 @@ const Business = sequelize.define("Business", {
     }
 })
 
-// sequelize.sync()
-// .then(() => {
-//     return Business.create({
-//         name: "Bioservice",
-//         cnpj: "12321312",
-//         description: "TEsteteste"
-//     })
-// })
+
 
 module.exports = Business

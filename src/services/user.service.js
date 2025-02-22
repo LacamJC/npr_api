@@ -1,7 +1,9 @@
 const { User, CollectionPoint } = require("../models/assosiations")
+const { validatePassword, validateName } = require("../utils/validations")
+const { userExists } = require("../utils/verify")
 
 exports.getCollectionPoints = async (id) => {
-    return CollectionPoint.findAll({where : {id_user : id}})
+    return CollectionPoint.findAll({ where: { id_user: id } })
 }
 
 exports.getAllUsers = async () => {
@@ -14,34 +16,23 @@ exports.getUserById = async (id) => {
 
 exports.createUser = async (data) => {
     const { name, password } = data
-    let valid = true
-    await User.findOne({
-        where: {
-            name: name,
-            password: password,
-        }
-    })
-        .then((user) => {
-            if (user) {
-                console.log("USUARIO JA CADASTRADO")
-                valid = false
-            }
-        })
-        .catch(err => {
-            console.log("Erro ao verficiar se usuario ja e cadastrado")
-        })
 
-    if (!valid) {
-        return { message: "Usuário já cadastrado" }
+    const passwordError = validatePassword(password)
+    if (passwordError) {
+        return passwordError.message
     }
 
-    if (name.length < 4 || name == undefined || name == null || typeof (name) !== "string" || name.trim().length < 1) {
-        return { message: "Usuário inválido, o usuario deve ter pelo menos 4 caracteres" }
+    const nameError = validateName(name)
+    if (nameError) {
+        return nameError.message
     }
 
-    if (password.length < 6 || password == undefined || password == null || typeof (password) !== "string" || password.trim().length < 1) {
-        return { message: "A senha deve ter pelo menos 6 caracteres" }
+    const exists = await userExists(name)
+    if(exists)
+    {
+        return {message: "Usuário já cadastrado"}
     }
+
     try {
         const newUser = await User.create({
             name: name,

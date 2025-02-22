@@ -1,5 +1,6 @@
 const { Business } = require("../models/assosiations")
-
+const { validateName, validatePassword, validateDescription, validateCNPJ } = require("../utils/validations")
+const { businessExists } = require("../utils/verify")
 exports.getAllBusiness = async (id) => {
     if (id) {
         console.log("E UMA ESPECIFICA ")
@@ -12,36 +13,51 @@ exports.getBusinessById = async (id) => {
 }
 
 exports.create = async (data) => {
-    const { name, cnpj, description } = data
+    const { name, password, cnpj, description } = data
 
-    if (name === null || name === undefined || name.trim().length <= 1 || name.length <= 0 || typeof (name) !== "string") {
-        return { message: "Nome de empresa inválida" }
+
+    const nameError = validateName(name)
+    if (nameError) {
+        return nameError.message
     }
 
-    if (cnpj === null || cnpj === undefined || cnpj.trim().length <= 1 || cnpj.length != 14 || typeof (cnpj) !== "string") {
-        return { message: "CNPJ inválido" }
+    const passwordError = validatePassword(password)
+    if (passwordError) {
+        return passwordError.message
     }
 
-    if (description === null || description === undefined || description.trim() <= 1 || description.length <= 0 || typeof (description) !== "string") {
-        return { message: "Descrição inválida" }
+
+
+    const cnpjError = validateCNPJ(cnpj)
+    if(cnpjError){
+        return cnpjError.message
     }
 
-    const business = await Business.findOne({
-        where: {
+    const descriptionError = validateDescription(description)
+    if(descriptionError)
+    {
+        return descriptionError.message
+    }
+
+    const exists = await businessExists(cnpj)
+    if(exists){
+        return {message: "Empresa já cadastrada"}
+    }
+    try{
+        const newBusiness = await Business.create({
             name: name,
-            cnpj: cnpj,
-        }
-    })
-
-    if (business) {
-        return { message: "Empresa já cadastrada" }
-    } else {
-        return await Business.create({
-            name: name,
+            password: password,
             cnpj: cnpj,
             description: description
         })
+
+        return newBusiness
+    }catch(err){
+        console.log("Erro ao criar nova empresa")
+        throw new Error("Erro ao criar empresa")
     }
+
+    
 
 
 }
