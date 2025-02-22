@@ -1,6 +1,7 @@
 const { User, CollectionPoint } = require("../models/assosiations")
 const { validatePassword, validateName } = require("../utils/validations")
 const { userExists } = require("../utils/verify")
+const bcrypt = require("bcrypt")
 
 exports.getCollectionPoints = async (id) => {
     return CollectionPoint.findAll({ where: { id_user: id } })
@@ -21,6 +22,7 @@ exports.createUser = async (data) => {
     if (passwordError) {
         return passwordError.message
     }
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     const nameError = validateName(name)
     if (nameError) {
@@ -36,7 +38,7 @@ exports.createUser = async (data) => {
     try {
         const newUser = await User.create({
             name: name,
-            password: password
+            password: hashedPassword
         })
         return newUser
     } catch (err) {

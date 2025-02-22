@@ -1,6 +1,7 @@
 const { Business } = require("../models/assosiations")
 const { validateName, validatePassword, validateDescription, validateCNPJ } = require("../utils/validations")
 const { businessExists } = require("../utils/verify")
+const bcrypt = require("bcrypt")
 exports.getAllBusiness = async (id) => {
     if (id) {
         console.log("E UMA ESPECIFICA ")
@@ -25,39 +26,39 @@ exports.create = async (data) => {
     if (passwordError) {
         return passwordError.message
     }
+    const hashedPassword = await bcrypt.hash(password, 10)
 
 
 
     const cnpjError = validateCNPJ(cnpj)
-    if(cnpjError){
+    if (cnpjError) {
         return cnpjError.message
     }
 
     const descriptionError = validateDescription(description)
-    if(descriptionError)
-    {
+    if (descriptionError) {
         return descriptionError.message
     }
 
     const exists = await businessExists(cnpj)
-    if(exists){
-        return {message: "Empresa já cadastrada"}
+    if (exists) {
+        return { message: "Empresa já cadastrada" }
     }
-    try{
+    try {
         const newBusiness = await Business.create({
             name: name,
-            password: password,
+            password: hashedPassword,
             cnpj: cnpj,
             description: description
         })
 
         return newBusiness
-    }catch(err){
+    } catch (err) {
         console.log("Erro ao criar nova empresa")
         throw new Error("Erro ao criar empresa")
     }
 
-    
+
 
 
 }
