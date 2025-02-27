@@ -2,19 +2,16 @@ const User = require('./User')
 const Business = require('./Business')
 const CollectionPoint = require('./CollectionPoint')
 const Category = require('./Category')
+require("dotenv").config();
 
 
 async function syncDatabase() {
     try{
             
         await User.sync({force:true})
-            
         await Business.sync({force:true})
         await Category.sync({force:true})
         await CollectionPoint.sync({force:true})
-            
-
-            
       
             
         console.log("Tabelas sincronizadas")
@@ -23,6 +20,8 @@ async function syncDatabase() {
     }
 }
 // syncDatabase()
+
+
 
 
 CollectionPoint.belongsTo(User, { foreignKey: "id_user", as: "user"})

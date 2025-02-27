@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
+
 const sequelize = new Sequelize(
   process.env.NODE_ENV === "test" ? "sqlite:memory" : process.env.DB_NAME,
   process.env.NODE_ENV === "test" ? undefined : process.env.DB_USER,
@@ -18,6 +19,8 @@ sequelize.authenticate()
   .catch((err) => {
       console.error("=============== ERRO AO CONECTAR COM BANCO DE DADOS ===============: \n", err)
     });
+
+
 
 
 

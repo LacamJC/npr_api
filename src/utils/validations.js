@@ -1,3 +1,5 @@
+const Business = require("../models/Business")
+
 exports.validatePassword = (password) => {
     if (password.length < 6 || password == undefined || password == null || typeof (password) !== "string" || password.trim().length < 1) {
         return { message: "A senha deve ter pelo menos 6 caracteres" }
@@ -26,7 +28,7 @@ exports.validateName = (name) => {
     }
 
     if (typeof (name) !== "string" || !isNaN(Number(name))) {
-        return { message: "Está variavel deve ser do tipo STRING" }
+        return { message: "O nome deve ser do tipo STRING" }
     }
 
     if (name.trim().length < 1) {
@@ -36,7 +38,7 @@ exports.validateName = (name) => {
 }
 
 exports.validateDescription = (description) => {
-    if(description === nul || description === undefined)
+    if(description === null || description === undefined)
     {
         return {message: "A descrição não pode ser nula"}
     }
@@ -59,10 +61,29 @@ exports.validateCNPJ = (cnpj) => {
     }
 
     if (typeof (cnpj) !== "string" || !isNaN(Number(cnpj))) {
-        return { message: "Está variavel deve ser do tipo STRING" }
+        return { message: "O CNPJ deve ser do tipo STRING" }
     }
 
     if (cnpj.trim().length != 14) {
         return { message: "CNPJ INVÁLIDO" }
     }
+}
+
+exports.validateEmail = (email) => {
+    if(email === null || email === undefined)
+        {
+            return {message: "O email não pode ser nula"}
+        }
+    
+        if(email.length < 1 || email.trim() < 1)
+        {
+            return {message: "O email não pode ser vazia"}
+        }
+    
+        if(typeof(email) !== "string" || !isNaN(Number(email))){
+            return {message: "O email deve ser uma STRING"}
+        }
+
+        return null
+    
 }

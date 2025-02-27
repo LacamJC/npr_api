@@ -1,5 +1,5 @@
 const { Business } = require("../models/assosiations")
-const { validateName, validatePassword, validateDescription, validateCNPJ } = require("../utils/validations")
+const { validateName, validatePassword, validateDescription, validateCNPJ, validateEmail } = require("../utils/validations")
 const { businessExists } = require("../utils/verify")
 const { createHashPassword } = require("../utils/security") 
 exports.getAllBusiness = async (id) => {
@@ -14,8 +14,20 @@ exports.getBusinessById = async (id) => {
 }
 
 exports.create = async (data) => {
-    const { name, password, cnpj, description } = data
+    const { name, password, cnpj, description, email } = data
 
+
+
+    const emailError = validateEmail(email)
+    if(emailError){
+        return emailError.message
+    }
+
+    const search = await Business.findOne({where : {email : email}})
+    if(search)
+    {
+        return {message: "Email já cadastrado"}
+    }
 
     const nameError = validateName(name)
     if (nameError) {
@@ -48,6 +60,7 @@ exports.create = async (data) => {
         const newBusiness = await Business.create({
             name: name,
             password: hashedPassword,
+            email: email,
             cnpj: cnpj,
             description: description
         })
